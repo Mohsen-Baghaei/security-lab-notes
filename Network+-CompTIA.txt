@@ -1,0 +1,27 @@
+CompTIA = Computing Technology Industry Association
+
+OSI = Open System Interconection
+
+OSI - 7 layer => Application > Presentation > Session > Transport > Network > Data Link > Physical => APSTNDP
+All People Seem To Need Data Processing
+
+Layer 1 => Physical = Cable
+Sends raw bits through cables, radio, fiber, etc.
+
+Layer 2 => Data Link = MAC (Media Access Control) address on Ethernet - Switching layer (EUI48 - EUI 64)
+Transfers data between devices on the same network using MAC addresses.
+
+Layer 3 => Network = Routing layer = IP (Internet protocol)
+Handles IP addressing and routing data between networks.
+
+Layer 4 => Transport = 
+Provides end-to-end data delivery, reliability, and flow control.
+
+Layer 5 => Session = 
+Establishes, manages, and ends communication sessions.
+
+Layer 6 => Presentation = 
+Handles data format, encryption, compression, and translation.
+
+Layer 7 => Application = 
+Provides network services directly to applications.

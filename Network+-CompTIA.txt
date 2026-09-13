@@ -14,14 +14,16 @@ Transfers data between devices on the same network using MAC addresses.
 Layer 3 => Network = Routing layer = IP (Internet protocol)
 Handles IP addressing and routing data between networks.
 
-Layer 4 => Transport = 
+Layer 4 => Transport = Post office - TCP/UDP
+TCP = Transmission Control Protocol
+UDP = User Datagram Protocol
 Provides end-to-end data delivery, reliability, and flow control.
 
-Layer 5 => Session = 
+Layer 5 => Session = Comunication management between devices - SSL/TLS
 Establishes, manages, and ends communication sessions.
 
-Layer 6 => Presentation = 
+Layer 6 => Presentation = Charecter encoding / application encryption 
 Handles data format, encryption, compression, and translation.
 
-Layer 7 => Application = 
+Layer 7 => Application = HTTP/HTTPS/FTP/DNS/POP3
 Provides network services directly to applications.

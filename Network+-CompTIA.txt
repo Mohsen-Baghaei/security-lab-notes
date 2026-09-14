@@ -1,5 +1,7 @@
 CompTIA = Computing Technology Industry Association
 
+---------- OSI ----------
+
 OSI = Open System Interconection
 
 OSI - 7 layer => Application > Presentation > Session > Transport > Network > Data Link > Physical => APSTNDP
@@ -27,3 +29,209 @@ Handles data format, encryption, compression, and translation.
 
 Layer 7 => Application = HTTP/HTTPS/FTP/DNS/POP3
 Provides network services directly to applications.
+
+---------- Networking Devices ----------
+
+Router
+A router connects different networks together and directs data packets between them based on IP addresses. It sits at the boundary of your network (e.g., between your home/office LAN 
+and the internet) and makes decisions about the best path for traffic to travel. Routers operate at Layer 3 (Network layer) of the OSI model.
+
+Switch
+A switch connects multiple devices within the same local network (LAN) and forwards data only to the specific device it's intended for, using MAC addresses. This is more efficient 
+than older hubs, which broadcast to every device. Switches operate at Layer 2 (Data Link layer), though "Layer 3 switches" also do basic routing.
+
+Firewalls
+A firewall monitors and controls incoming/outgoing network traffic based on predefined security rules, acting as a barrier between trusted internal networks and untrusted external 
+ones (like the internet). It can be hardware, software, or both, and works by inspecting packets and blocking or allowing them based on IP address, port, protocol, or more advanced 
+criteria (application-aware firewalls).
+Layer 3 => can work as reouter
+
+IDS/IPS (Intrusion Detection/Prevention Systems)
+IDS (Intrusion Detection System): Passively monitors network traffic for suspicious activity or known attack signatures, and alerts administrators — it doesn't block anything itself.
+IPS (Intrusion Prevention System): Sits inline with traffic flow and actively blocks or drops malicious traffic in real time, in addition to detecting it.
+
+They're often combined in modern security appliances (and frequently built into next-gen firewalls).
+
+Load Balancer
+A load balancer distributes incoming network traffic across multiple servers, so no single server gets overwhelmed. This improves reliability (if one server fails, traffic is rerouted 
+to healthy ones) and performance/scalability for high-traffic applications. Common algorithms include round-robin, least connections, and IP hash.
+
+Proxies
+A proxy server acts as an intermediary between a client and the internet. Requests go through the proxy, which forwards them on the client's behalf. Benefits include:
+
+Anonymity/privacy — hides the client's real IP address
+Caching — stores frequently requested content for faster access
+Content filtering/access control — often used in corporate/school networks
+Reverse proxies do the opposite: they sit in front of servers, forwarding client requests to backend servers (often paired with load balancing).
+
+NAS and SAN
+NAS (Network Attached Storage): A dedicated storage device connected to a network, giving multiple users/devices file-level access to shared storage over standard Ethernet — it's 
+like a shared network drive. Simple to set up, good for file sharing.
+SAN (Storage Area Network): A dedicated, high-speed network that provides block-level storage access, typically used by servers needing very fast, low-latency access to raw 
+storage (e.g., for databases or virtualization). More complex and expensive, often using Fibre Channel or iSCSI.
+
+Wireless LAN Controller (WLC)
+A Wireless LAN Controller centrally manages multiple wireless access points (APs) across a network — commonly used in enterprises or campuses with many APs. Instead of configuring 
+each AP individually, the WLC handles configuration, security policies, channel/power management, load balancing across APs, and roaming (so a device moving between APs keeps a 
+stable connection) — all from one place.
+
+========== Extra ==========
+Router
+What it does: Connects two or more different networks (e.g., your LAN to the internet, or two branch offices to each other) and forwards data packets between them based on IP addresses. It reads the destination IP of each packet and decides the best path using a routing table.
+
+OSI Layer: Layer 3 (Network layer)
+
+How it works:
+
+Maintains a routing table of known networks and the "next hop" to reach them
+Uses routing protocols to build/update that table dynamically: RIP, OSPF, EIGRP, BGP (BGP is the protocol that runs the entire internet's backbone routing)
+Performs NAT (Network Address Translation) — translates private internal IPs to a public IP so multiple devices can share one internet connection
+Can enforce basic ACLs (Access Control Lists) to permit/deny traffic
+
+Types:
+
+Edge/border routers — connect your network to an ISP or another network
+Core routers — route traffic within a large network backbone, very high throughput
+Wireless routers — combine routing + Wi-Fi access point + switch (common in homes)
+Virtual routers — software-based, run in cloud environments (e.g., AWS Virtual Private Gateway)
+
+Key point: Routers connect different networks; switches connect devices within the same network.
+
+
+Switch
+What it does: Connects multiple devices within a single LAN and intelligently forwards traffic only to the specific device it's addressed to, rather than broadcasting to everyone.
+
+OSI Layer: Layer 2 (Data Link) — uses MAC addresses; Layer 3 switches also route between subnets using IP.
+
+How it works:
+
+Builds and maintains a MAC address table mapping each port to the device connected to it
+Forwards frames only out the correct port (unlike a hub, which floods every port) — this drastically reduces collisions and improves performance
+Supports VLANs (Virtual LANs) to logically segment a physical network into isolated broadcast domains
+Uses STP (Spanning Tree Protocol) to prevent loops when there are redundant links
+
+Types:
+
+Unmanaged switches — plug-and-play, no configuration, used in small/home setups
+Managed switches — configurable (VLANs, QoS, port security, monitoring), used in businesses
+Layer 3 switches — combine switching + basic inter-VLAN routing, common in enterprise cores
+PoE (Power over Ethernet) switches — deliver power and data over the same cable, used for IP phones/cameras/APs
+
+
+Firewalls
+What it does: Monitors and controls incoming/outgoing traffic based on security rules, acting as a barrier between trusted and untrusted networks.
+
+OSI Layer: Varies by type — from Layer 3/4 (basic packet filters) up to Layer 7 (application-aware firewalls)
+
+How it works / types:
+
+Packet-filtering firewalls — inspect header info (source/dest IP, port, protocol) against static rules; fast but basic
+Stateful inspection firewalls — track the state of active connections, so return traffic for an established session is automatically allowed
+Proxy/application-layer firewalls — inspect actual application data (e.g., HTTP content), not just headers
+Next-Generation Firewalls (NGFW) — combine traditional filtering with deep packet inspection, intrusion prevention, application awareness, and SSL inspection
+Web Application Firewalls (WAF) — specifically protect web apps from attacks like SQL injection and XSS
+
+Deployment forms: Hardware appliance, software (host-based), or cloud-native (e.g., cloud security groups)
+
+Common vendors: Cisco ASA/Firepower, Palo Alto, Fortinet, pfSense (open source)
+
+
+IDS / IPS
+IDS (Intrusion Detection System):
+
+Passively monitors traffic (usually on a mirrored/SPAN port), analyzes it against known attack signatures or behavioral baselines, and alerts administrators
+Does NOT sit inline — it doesn't block traffic itself
+Types: NIDS (network-based, monitors traffic) vs HIDS (host-based, monitors a single machine's logs/files)
+
+IPS (Intrusion Prevention System):
+
+Sits inline with the traffic path, so it can actively block, drop, or reset malicious connections in real time
+Detection methods:
+Signature-based — matches traffic against a database of known attack patterns (fast, reliable for known threats, blind to new/zero-day attacks)
+Anomaly-based — builds a baseline of "normal" behavior and flags deviations (catches novel attacks, more false positives)
+Policy-based — flags anything violating a defined security policy
+
+Note: Modern NGFWs typically have IDS/IPS functionality built in as one module rather than as separate boxes.
+
+
+Load Balancer
+What it does: Distributes incoming client requests across a pool of backend servers, improving performance, reliability, and scalability.
+
+OSI Layer:
+
+Layer 4 load balancing — distributes based on IP/port (TCP/UDP), fast, doesn't inspect content
+Layer 7 load balancing — inspects application-level data (HTTP headers, URLs, cookies) to make smarter routing decisions
+
+Common algorithms:
+
+Round robin — cycles through servers in order
+Least connections — sends new requests to the server with fewest active connections
+Weighted round robin/least connections — accounts for servers with different capacities
+IP hash — routes based on client IP, useful for session persistence ("sticky sessions")
+Least response time — picks the server currently responding fastest
+
+Key features:
+
+Health checks — automatically detects and routes around failed servers
+SSL termination — decrypts HTTPS traffic at the load balancer so backend servers don't have to
+High availability — often deployed in active/passive pairs to avoid becoming a single point of failure
+
+Examples: F5 BIG-IP, HAProxy, NGINX, AWS Elastic Load Balancer, Cloudflare Load Balancing
+
+
+Proxies
+What it does: Acts as an intermediary that relays requests between a client and a destination server.
+
+Forward proxy (client-side):
+
+Sits in front of clients, forwarding their requests out to the internet
+Client's real IP is hidden from the destination server
+Used for: content filtering (schools/offices), caching frequently accessed content, bypassing geo-restrictions, enforcing acceptable-use policies
+
+Reverse proxy (server-side):
+
+Sits in front of one or more backend servers, forwarding client requests to them
+Backend servers' real IPs are hidden from clients
+Used for: load balancing, SSL termination, caching, compression, protecting servers from direct exposure to the internet, serving as a single entry point for microservices
+Examples: NGINX, HAProxy, Cloudflare, Apache with mod_proxy
+
+Transparent vs. anonymous vs. high-anonymity proxies — differ in how much they reveal about the original client to the destination.
+
+
+NAS and SAN
+NAS (Network Attached Storage):
+
+A dedicated file-storage device connected to the network, accessed by multiple users/devices at the file level (like a shared network drive)
+Uses standard Ethernet and file-sharing protocols: NFS (Linux/Unix), SMB/CIFS (Windows), AFP (older Mac)
+Simple to set up and manage, relatively affordable
+Good for: shared file storage, backups, media serving, small-to-medium business file shares
+Often built with RAID for redundancy
+
+SAN (Storage Area Network):
+
+A dedicated, high-speed network that provides shared storage at the block level — servers see it as if it were a locally attached disk
+Uses specialized protocols/hardware: Fibre Channel (FC), iSCSI (block storage over standard IP/Ethernet), FCoE
+Requires dedicated switches (FC switches) for the storage fabric in traditional deployments
+Higher performance, lower latency, more complex and expensive
+Good for: databases, virtualization (VMware/Hyper-V datastores), transaction-heavy enterprise applications
+
+
+Wireless LAN Controller (WLC)
+What it does: Centrally manages, configures, and monitors multiple wireless access points (APs) across an organization, instead of configuring each AP individually.
+
+Key functions:
+
+Configuration management — pushes SSIDs, security settings, and channel/power settings to all APs at once
+RF management — automatically adjusts channel selection and transmit power to minimize interference (Radio Resource Management)
+Seamless roaming — lets devices move between APs without dropping their connection or re-authenticating
+Load balancing across APs — steers clients to less-congested APs
+Security enforcement — manages authentication (WPA2/WPA3, 802.1X/RADIUS), rogue AP detection
+Guest network management — captive portals, guest VLANs, bandwidth throttling
+
+Architectures:
+
+Hardware controller — a dedicated physical appliance on-premises (traditional enterprise model, e.g., Cisco WLC)
+Cloud-managed — APs are managed via a cloud dashboard, no physical controller needed (e.g., Cisco Meraki, Aruba Central, Ubiquiti UniFi)
+Controller-less/distributed — intelligence is distributed among the APs themselves rather than a central box
+
+Typical use case: Campuses, hospitals, hotels, large offices — anywhere you have dozens to thousands of APs that need consistent, centralized policy.

@@ -9,26 +9,35 @@ All People Seem To Need Data Processing
 
 Layer 1 => Physical = Cable
 Sends raw bits through cables, radio, fiber, etc.
+Deals with the actual hardware and transmission of bits — 0s and 1s — through cables, fiber optics, or wireless signals. It defines voltages, pin layouts, data rates, 
+and physical topology.
 
 Layer 2 => Data Link = MAC (Media Access Control) address on Ethernet - Switching layer (EUI48 - EUI 64)
 Transfers data between devices on the same network using MAC addresses.
+Takes bits and organizes them into frames. It handles MAC addresses, error detection, and access to the shared network medium. Switches operate here.
 
 Layer 3 => Network = Routing layer = IP (Internet protocol)
 Handles IP addressing and routing data between networks.
+Handles logical addressing and routing between different networks. IP addresses live here. Routers operate at this layer.
 
 Layer 4 => Transport = Post office - TCP/UDP
 TCP = Transmission Control Protocol
 UDP = User Datagram Protocol
 Provides end-to-end data delivery, reliability, and flow control.
+Provides end-to-end communication between applications. It breaks data into segments, manages reliability, ordering, error recovery, and flow control. 
+TCP and UDP are here. Port numbers are used.
 
 Layer 5 => Session = Comunication management between devices - SSL/TLS
 Establishes, manages, and ends communication sessions.
+Establishes, maintains, and terminates sessions between applications. It also handles synchronization and checkpoints so a long transfer can resume if interrupted.
 
 Layer 6 => Presentation = Charecter encoding / application encryption 
 Handles data format, encryption, compression, and translation.
+Ensures data is in a usable format. It handles translation, encryption/decryption, and compression. For example, converting text to ASCII or encrypting with TLS.
 
 Layer 7 => Application = HTTP/HTTPS/FTP/DNS/POP3
 Provides network services directly to applications.
+The layer closest to the user. It provides network services to applications like web browsers, email clients, and file transfer tools. HTTP, DNS, SMTP, and FTP operate here.
 
 ---------- Networking Devices ----------
 

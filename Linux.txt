@@ -1,1 +1,45 @@
 Terminals and Shell
+
+echo = repid what ever you type after 
+
+expr = evaluates a simple expression and prints the result
+expr 123456 + 7890 => 131346
+
+whoami = tells who you are
+
+id = to see what groups you belong to
+In Linux, users are organized into groups. These groups determine the permissions and access rights a user has.
+root is the superuser – like the administrator of the system!
+
+pwd = "print working directory". It displays your current location in the file system.
+
+ls = This will list the files and directories in your current working directory
+
+touch = used to create an empty file
+
+echo "Hello, Linux" > file2.txt
+The > symbol redirects the output of echo into a file named file2.txt
+
+echo "Hidden file" > .hiddenfile
+This creates a hidden file. In Linux, any file or directory name that starts with a dot (.) is considered hidden.
+
+mkdir testdir = create a directory
+
+ls -l = "long" format listing
+You'll see additional details like file permissions, owner, size, and modification date.
+
+ls -a = all files including the hidden
+
+cp file1.txt file1_copy.txt 
+This creates a copy of file1.txt named file1_copy.txt in the current directory.
+
+cp file2.txt testdir/
+This copies file2.txt into the testdir directory.
+
+cp -r testdir testdir_copy
+The -r option stands for "recursive". It's necessary when copying directories to ensure all contents are copied.
+
+mv = The mv command is used for both moving and renaming
+mv file1.txt newname.txt
+mv testdir_copy new_testdir
+mv testdir/newname.txt ./original_file1.txt

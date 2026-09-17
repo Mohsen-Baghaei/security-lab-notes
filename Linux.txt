@@ -1,5 +1,7 @@
 Terminals and Shell
 
+Remember, if you ever forget how to use a command, you can always type man followed by the command name (e.g., man cat) to see the manual page for that command
+
 echo = repid what ever you type after 
 
 expr = evaluates a simple expression and prints the result
@@ -43,3 +45,30 @@ mv = The mv command is used for both moving and renaming
 mv file1.txt newname.txt
 mv testdir_copy new_testdir
 mv testdir/newname.txt ./original_file1.txt
+
+rm = remove file or directory
+
+rm -i = The -i option prompts you for confirmation before deleting each file
+
+rmdir (remove directory) only works on empty directories.
+rm -r testdir = To remove a directory that is not empty, we need to use rm with the -r (recursive)
+
+ls -R test/
+For ls, -R means "recursive listing" (list subdirectories), while -r means "reverse sort order". For cp and rm, the recursive option is -r (lowercase). 
+
+cat = displays the contents of one or more files in the terminal.
+cat can also combine files or redirect their contents, but its most common use is viewing a file.
+
+cat -n /tmp/Hello
+-n  tells cat to number all output lines.
+
+head -n1 /tmp/hello
+head is used to view the beginning or "head" of a file. By default, without the -n1 option, head would show the first 10 lines of the file.
+-c = The -c1 option tells head to show only the first byte (character) of the file. Like with -n, you can change the 1 to any number to see that many bytes.
+
+tail -n1 /tmp/hello =  it shows the end of a file.
+
+diff file1 file2 = This tells diff to compare the contents of file1 and file2
+1c1: This indicates that line 1 in the first file needs to be changed to match line 1 in the second file.
+
+diff -r ~/Desktop ~/Code = compare entire directories.

@@ -244,3 +244,201 @@ Cloud-managed — APs are managed via a cloud dashboard, no physical controller 
 Controller-less/distributed — intelligence is distributed among the APs themselves rather than a central box
 
 Typical use case: Campuses, hospitals, hotels, large offices — anywhere you have dozens to thousands of APs that need consistent, centralized policy.
+
+
+---------- Networking Functions ----------
+CDN = Content Delivery Network
+What it is: A geographically distributed network of servers that cache and deliver content (web pages, images, videos, scripts) from a location physically close to the end user, rather than from one central origin server.
+
+How it works:
+
+The origin server's content is replicated across many edge servers (Points of Presence, or PoPs) worldwide
+When a user requests content, DNS-based routing or Anycast sends them to the nearest or best-performing edge server
+That edge server serves a cached copy if available; otherwise it fetches from the origin and caches it for future requests
+
+Benefits:
+
+Lower latency — content travels a shorter physical distance
+Reduced origin server load — most requests are absorbed by edge caches
+Better reliability/DDoS resilience — traffic is spread across many servers instead of hitting one
+Bandwidth cost savings for the site owner
+
+Examples: Cloudflare, Akamai, Amazon CloudFront, Fastly
+
+
+VPN = Virtual Private Network
+What it is: A technology that creates an encrypted, private "tunnel" over a public network (usually the internet), allowing a device to securely connect to another network as if it were directly attached to it.
+
+How it works:
+
+Traffic between the client and a VPN server/gateway is encapsulated and encrypted using a tunneling protocol
+The VPN server decrypts traffic and forwards it to its destination, masking the client's real IP and location
+
+Common protocols:
+
+OpenVPN — open-source, highly configurable, uses SSL/TLS
+IPsec — a suite of protocols often paired with L2TP or used standalone (IKEv2/IPsec)
+WireGuard — modern, lightweight, fast, growing in popularity
+SSL/TLS VPNs — often browser-based, used for remote access to specific apps
+
+Types:
+
+Remote access VPN — individual users connecting to a private network (e.g., employees working from home)
+Site-to-site VPN — connects two entire networks/offices together permanently
+
+Uses: Securing traffic on public Wi-Fi, remote access to corporate resources, bypassing geo-restrictions, privacy from ISPs
+
+
+QoS = Quality of Servvice
+What it is: A set of technologies/techniques used to manage network resources by prioritizing certain types of traffic over others, ensuring critical applications get the bandwidth and low latency they need.
+
+Why it matters: Not all traffic is equally sensitive — a video call or VoIP call suffers badly from delay/jitter, while a file download can tolerate it. QoS lets networks prioritize accordingly.
+
+Key mechanisms:
+
+Classification & marking — tags packets (e.g., using DSCP or 802.1p markings) so devices along the path know how to treat them
+Queuing/scheduling — high-priority traffic is placed in priority queues and serviced first (e.g., Weighted Fair Queuing)
+Traffic shaping/policing — controls the rate of traffic to smooth bursts or enforce bandwidth limits
+Congestion avoidance — techniques like RED (Random Early Detection) to prevent queue overflow
+
+Common metrics QoS manages:
+
+Bandwidth — capacity
+Latency — delay
+Jitter — variation in delay
+Packet loss
+
+Typical use cases: Prioritizing VoIP/video conferencing over general web browsing on a corporate network, or prioritizing gaming traffic on a home router.
+
+
+TTL = Time To live
+What it is: A field in a packet (or a DNS record) that limits how long the data is valid or how many "hops" it can traverse before being discarded. It has two very different but related uses:
+
+1. TTL in IP packets:
+
+An 8-bit field in the IP header, set by the sending device (commonly 64, 128, or 255)
+Each router that forwards the packet decrements the TTL by 1
+If TTL reaches 0, the packet is discarded and an ICMP "Time Exceeded" message is sent back
+Purpose: prevents packets from looping forever due to routing errors
+Bonus use: the traceroute/tracert tool exploits this — it sends packets with increasing TTL values (1, 2, 3...) to map every hop along a path
+
+2. TTL in DNS records:
+
+Specifies (in seconds) how long a DNS resolver/caching server should cache a record before re-querying the authoritative server
+Short TTL (e.g., 60s) → changes propagate fast, but more DNS lookups/load
+Long TTL (e.g., 86400s = 24h) → less load, but changes take longer to propagate globally
+Default TTL for macos/linux is 64 hops
+Default TTL for Windows is 128 hops
+
+
+DNS = Domain Name System (the command is dig)
+What it is: The system that translates human-readable domain names (e.g., example.com) into IP addresses that computers use to identify each other — often called "the phonebook of the internet."
+
+How a lookup works (simplified):
+
+Your device checks its local cache; if not found, asks a recursive resolver (often your ISP's or a public one like Google's 8.8.8.8 or Cloudflare's 1.1.1.1)
+The resolver queries a root server → which points to the correct TLD server (e.g., .com)
+The TLD server points to the domain's authoritative name server
+The authoritative server returns the actual IP address
+The resolver caches the answer (per the TTL) and returns it to your device
+
+Key record types:
+
+A record — maps a domain to an IPv4 address
+AAAA record — maps a domain to an IPv6 address
+CNAME — alias, points one domain name to another
+MX — mail server for the domain
+NS — specifies the authoritative name servers
+TXT — arbitrary text, often used for verification (e.g., SPF, DKIM for email security)
+PTR — reverse lookup, IP → domain name
+
+DNS over HTTPS/TLS (DoH/DoT): newer standards that encrypt DNS queries for privacy, since plain DNS is unencrypted by default.
+
+NAT (Network Address Translation)
+Translates private internal IP addresses to a public IP (and back), allowing many devices to share one public IP. Covered briefly under routers, but worth calling out on its own — it's foundational to how home/office networks connect to the internet.
+
+DHCP (Dynamic Host Configuration Protocol)
+Automatically assigns IP addresses (and other settings like DNS server, gateway) to devices joining a network, so you don't have to configure each device manually. Uses a "DORA" process: Discover → Offer → Request → Acknowledge.
+
+ARP (Address Resolution Protocol)
+Resolves an IP address to the physical MAC address of a device on the local network — needed because Ethernet switches forward frames by MAC address, not IP.
+
+ICMP (Internet Control Message Protocol) / Ping
+Used for network diagnostics and error reporting — ping uses ICMP Echo Request/Reply to test reachability and measure round-trip time; also used for the TTL-exceeded messages mentioned above.
+
+MTU (Maximum Transmission Unit)
+The largest packet size (in bytes) that can be transmitted over a network segment without fragmentation. Standard Ethernet MTU is 1500 bytes; exceeding it causes fragmentation or drops depending on settings.
+
+Subnetting & CIDR
+The practice of dividing a larger network into smaller sub-networks, written in CIDR notation (e.g., 192.168.1.0/24), where the number after the slash indicates how many bits are used for the network portion.
+
+Port numbers
+A 16-bit number (0–65535) identifying a specific service/process on a device — e.g., port 80 (HTTP), 443 (HTTPS), 22 (SSH), 53 (DNS). Combined with an IP address, a port forms a full socket.
+
+SSL/TLS
+Cryptographic protocols that encrypt data in transit (the "S" in HTTPS). TLS is the modern successor to SSL. Involves a handshake to establish encryption keys and verify server identity via certificates.
+
+Bandwidth vs. Throughput vs. Latency
+
+Bandwidth — theoretical maximum capacity of a link
+Throughput — actual data successfully transferred
+Latency — time delay for data to travel from source to destination
+
+
+IP (Internet Protocol)
+
+What it is: IP is the core protocol of the internet, responsible for addressing and routing packets of data so they get from a source device to a destination device across interconnected networks. It's a Layer 3 (Network layer) protocol and is "connectionless" — each packet is routed independently, with no guaranteed delivery (that reliability is handled by TCP on top of it, forming the well-known TCP/IP stack).
+
+IPv4 vs IPv6
+
+IPv4:
+
+32-bit address, written as four decimal octets separated by dots: 192.168.1.1
+Provides about 4.3 billion unique addresses — long since exhausted for direct public allocation, which is why NAT became essential
+Still the dominant protocol in most networks today
+
+IPv6:
+
+128-bit address, written as eight groups of hexadecimal digits separated by colons: 2001:0db8:85a3:0000:0000:8a2e:0370:7334 (can be abbreviated, e.g., ::1 for loopback)
+Provides an effectively inexhaustible number of addresses (340 undecillion)
+Designed to eliminate the need for NAT, simplify routing, and include built-in support for features like auto-configuration and improved security (IPsec was originally mandatory in the spec)
+Adoption is growing but IPv4 remains widespread, so most networks run dual-stack (both simultaneously)
+Address Structure & Classes (IPv4)
+
+Historically, IPv4 addresses were divided into classes:
+
+Class A: 1.0.0.0 – 126.255.255.255 (large networks, /8)
+Class B: 128.0.0.0 – 191.255.255.255 (/16)
+Class C: 192.0.0.0 – 223.255.255.255 (/24, common for small networks)
+Class D: multicast addresses
+Class E: reserved/experimental
+
+This rigid class system has largely been replaced by CIDR (Classless Inter-Domain Routing), which allows flexible subnet sizes using a prefix length (e.g., /24, /16) instead of fixed classes.
+
+Public vs. Private IP Addresses
+Public IPs — globally unique, routable on the internet, assigned by ISPs/regional registries (ARIN, RIPE, etc.)
+Private IPs — reserved ranges for internal/local networks, not routable on the public internet:
+10.0.0.0 – 10.255.255.255 (10.0.0.0/8)
+172.16.0.0 – 172.31.255.255 (172.16.0.0/12)
+192.168.0.0 – 192.168.255.255 (192.168.0.0/16)
+Devices with private IPs reach the internet via NAT on a router, which translates their address to the router's public IP
+Static vs. Dynamic IP
+Static IP — manually assigned, doesn't change; used for servers, printers, devices needing a consistent address
+Dynamic IP — assigned automatically (usually via DHCP), can change over time; typical for most client devices
+Subnetting
+
+Breaking a large network into smaller, more manageable subnetworks using a subnet mask (or CIDR prefix). For example, 192.168.1.0/24 has a subnet mask of 255.255.255.0, giving 256 addresses (254 usable for hosts, with the first reserved as the network address and the last as the broadcast address). Subnetting improves security, reduces broadcast traffic, and allows logical organization (e.g., separate subnets for different departments).
+
+Special/Reserved Addresses
+127.0.0.1 — loopback, refers to the local device itself
+0.0.0.0 — represents "any address" or an unassigned address
+255.255.255.255 — limited broadcast address, sent to all devices on the local network
+169.254.x.x — APIPA (Automatic Private IP Addressing), self-assigned when DHCP fails
+How IP Fits with Other Protocols
+
+IP itself only handles addressing and best-effort delivery — it doesn't guarantee packets arrive, arrive in order, or arrive at all. That's why it's typically paired with:
+
+TCP (Transmission Control Protocol) — adds reliability, ordering, and error-checking (used for web browsing, email, file transfer)
+UDP (User Datagram Protocol) — faster, no reliability guarantees, used where speed matters more than perfect delivery (video streaming, gaming, VoIP)
+
+Together, these form the TCP/IP model, the foundational framework the entire modern internet is built on.

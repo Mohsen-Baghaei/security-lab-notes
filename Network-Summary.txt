@@ -168,10 +168,39 @@ Used for network-to-network or gateway-to-gateway communication — most common 
 the original internal (private) IPs stay hidden and protected
 More overhead due to the extra IP header, but provides greater security and is essential when connecting entire private networks over the public internet
 
-IKE (Internet Key Exchange)
-IPsec uses to negotiate security parameters
-Check the comprehensive document
+IKE (Internet Key Exchange) is the protocol IPsec uses to negotiate security parameters and establish shared secret keys before any actual data encryption happens. 
+It runs in two distinct phases.
 
+Summary flow: Phase 1 = "let's agree how to talk securely and prove who we are" → Phase 2 = "now let's agree how to actually protect the data" → Data transfer begins.
+
+Unicast = One-to-one communication — a single packet is sent from one source to exactly one specific destination.
+
+Multicast = Uses reserved address ranges: 224.0.0.0 – 239.255.255.255 for IPv4
+Devices "join" a multicast group using IGMP (Internet Group Management Protocol)
+Used for: IPTV, video conferencing, stock market data feeds, routing protocol updates (e.g., OSPF uses multicast addresses like 224.0.0.5)
+
+Anycast = One-to-nearest communication — multiple servers share the same IP address, and the network routes each request to whichever instance is topologically "closest" 
+(based on routing metrics, not necessarily physical distance).
+Used for: DNS root servers (all 13 "root server" identities are actually hundreds of physical anycast instances worldwide), CDN edge server selection, DDoS mitigation services
+
+Broadcast = IPv4 only — IPv6 has no broadcast; it uses multicast instead for similar purposes
+Used for: ARP requests ("who has this IP?"), DHCP discovery (a client broadcasting to find a DHCP server before it even has an IP)
+
+Fiber Optic Communication
+Single-mode fiber (SMF)
+Uses laser light sources
+Supports much longer distances
+
+
+Multimode fiber (MMF)
+Uses LED or VCSEL light sources, cheaper equipment
+Shorter range
+
+Twisted Pair Copper Cable = The most common cabling for LANs
+
+UTP (Unshielded Twisted Pair)
+STP (Shielded Twisted Pair)
+Almost always terminated with an RJ45 connector.
 
 
 

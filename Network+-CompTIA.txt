@@ -337,7 +337,7 @@ Default TTL for Windows is 128 hops
 
 DNS = Domain Name System (the command is dig)
 What it is: The system that translates human-readable domain names (e.g., example.com) into IP addresses that computers use to identify each other — often called
- "the phonebook of the internet."
+"the phonebook of the internet."
 
 How a lookup works (simplified):
 
@@ -365,7 +365,7 @@ calling out on its own — it's foundational to how home/office networks connect
 
 DHCP (Dynamic Host Configuration Protocol)
 Automatically assigns IP addresses (and other settings like DNS server, gateway) to devices joining a network, so you don't have to configure each device manually.
- Uses a "DORA" process: Discover → Offer → Request → Acknowledge.
+Uses a "DORA" process: Discover → Offer → Request → Acknowledge.
 
 ARP (Address Resolution Protocol)
 Resolves an IP address to the physical MAC address of a device on the local network — needed because Ethernet switches forward frames by MAC address, not IP.
@@ -381,10 +381,6 @@ fragmentation or drops depending on settings.
 Subnetting & CIDR
 The practice of dividing a larger network into smaller sub-networks, written in CIDR notation (e.g., 192.168.1.0/24), where the number after the slash indicates 
 how many bits are used for the network portion.
-
-Port numbers
-A 16-bit number (0–65535) identifying a specific service/process on a device — e.g., port 80 (HTTP), 443 (HTTPS), 22 (SSH), 53 (DNS). Combined with an IP address,
- a port forms a full socket.
 
 SSL/TLS
 Cryptographic protocols that encrypt data in transit (the "S" in HTTPS). TLS is the modern successor to SSL. Involves a handshake to establish encryption keys 
@@ -537,12 +533,14 @@ You manage: OS, runtime, applications, data
 Provider manages: physical hardware, virtualization, storage, networking infrastructure
 Examples: AWS EC2, Google Compute Engine, Azure Virtual Machines
 Best for: maximum control and customization, migrating existing on-prem infrastructure to the cloud
+
 PaaS (Platform as a Service)
 Provider gives you a ready-to-use platform to build, deploy, and run applications, without managing the underlying servers or OS
 You manage: just your application code and data
 Provider manages: OS, runtime, middleware, servers, scaling
 Examples: Heroku, Google App Engine, Azure App Service, AWS Elastic Beanstalk
 Best for: developers who want to focus purely on writing code without infrastructure overhead
+
 SaaS (Software as a Service)
 Provider delivers a complete, ready-to-use application over the internet — you just use it
 You manage: nothing but your usage/data within the app
@@ -708,14 +706,13 @@ Traffic Delivery Methods: Unicast, Multicast, Anycast, Broadcast
 These describe how a packet is addressed and delivered to one or more recipients.
 
 Unicast
-
 What it is: One-to-one communication — a single packet is sent from one source to exactly one specific destination.
 
 The most common form of network communication (e.g., loading a webpage, sending an email)
 Each device has its own unique IP address as the destination
 Simple and efficient for direct communication, but inefficient if the same data needs to go to many recipients (you'd need a separate copy per recipient)
-Multicast
 
+Multicast
 What it is: One-to-many (or many-to-many) communication — a single packet is sent to a group of interested receivers, identified by a special multicast address, without 
 needing to know each individual recipient's address.
 
@@ -723,16 +720,16 @@ Uses reserved address ranges: 224.0.0.0 – 239.255.255.255 for IPv4
 Devices "join" a multicast group using IGMP (Internet Group Management Protocol); routers use protocols like PIM (Protocol Independent Multicast) to build efficient distribution trees
 The sender transmits data once; the network replicates it only where needed (at branch points), rather than sending duplicate copies all the way from the source
 Used for: IPTV, video conferencing, stock market data feeds, routing protocol updates (e.g., OSPF uses multicast addresses like 224.0.0.5)
-Anycast
 
+Anycast
 What it is: One-to-nearest communication — multiple servers share the same IP address, and the network routes each request to whichever instance is topologically "closest" 
 (based on routing metrics, not necessarily physical distance).
 
 Relies on routing protocols (typically BGP) to advertise the same IP prefix from multiple locations; routers naturally forward traffic toward the nearest advertised source
 If one anycast node fails, traffic automatically reroutes to the next closest one — providing built-in redundancy and load distribution
 Used for: DNS root servers (all 13 "root server" identities are actually hundreds of physical anycast instances worldwide), CDN edge server selection, DDoS mitigation services
-Broadcast
 
+Broadcast
 What it is: One-to-all communication — a single packet is sent to every device on a local network segment.
 
 Uses the limited broadcast address 255.255.255.255 (reaches all devices on the local subnet) or a directed broadcast (the subnet's broadcast address, e.g., 192.168.1.255 for a /24 network)
@@ -784,43 +781,13 @@ offline password-guessing attacks).
 
 LTE (Long-Term Evolution)
 
-What it is: A cellular network standard for wide-area mobile broadband, commonly marketed as "4G" (true 4G technically requires LTE-Advanced, but LTE is broadly branded as 4G).
-
-Key characteristics:
-
-Developed by 3GPP (3rd Generation Partnership Project), evolving from earlier 3G (UMTS/HSPA) networks
-All-IP network architecture — unlike older 3G networks, LTE carries voice as data too (VoLTE — Voice over LTE) rather than using a separate circuit-switched voice network
-Uses OFDMA for the downlink and SC-FDMA for the uplink for efficient spectrum use
-Typical real-world speeds: tens to a few hundred Mbps downlink; theoretical peak with LTE-Advanced can reach ~1 Gbps
-Operates across a wide range of licensed frequency bands (varies significantly by country/carrier)
-
-Architecture basics:
-
-eNodeB — the base station (cell tower) that devices connect to
-EPC (Evolved Packet Core) — the core network handling mobility management, authentication, and routing traffic to the internet
-UE (User Equipment) — the mobile device itself
-
-Evolution context: 3G → 4G/LTE → 5G. 5G builds on similar core concepts but adds much higher frequency bands (including mmWave), massive MIMO, network slicing, and dramatically 
-lower latency, targeting use cases like autonomous vehicles and industrial IoT in addition to faster mobile broadband.
-
-IEEE Ethernet Standards (802.3)
-
-What it is: The IEEE 802.3 family of standards defines wired Ethernet networking — the rules for how devices communicate over cabled LANs, covering speed, cabling type, and maximum 
-distance.
-
 Naming convention decoded (e.g., 1000BASE-T):
 
 Number (1000) — speed in Mbps
 BASE — baseband signaling (the entire cable's bandwidth is used for a single signal, as opposed to broadband)
 Suffix (T, TX, SX, LX, etc.) — indicates the medium: T/TX = twisted-pair copper; SX = short-range multimode fiber; LX = long-range single-mode fiber
 
-Other important 802.3-related standards:
-
-802.3af / 802.3at / 802.3bt — Power over Ethernet (PoE, PoE+, PoE++), delivering electrical power over the same cable as data
-802.1Q — VLAN tagging standard (technically 802.1, not 802.3, but essential to Ethernet switching)
-802.3x — flow control (PAUSE frames)
 Fiber Optic Communication
-
 What it is: A transmission method that sends data as pulses of light through thin strands of glass or plastic fiber, rather than electrical signals through copper.
 
 How it works: A transmitter (laser or LED) converts electrical signals into light pulses, which travel through the fiber core via total internal reflection (the light bounces 

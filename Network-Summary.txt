@@ -1,0 +1,188 @@
+Router
+Layer 3 (Network layer)
+Maintains a routing table of known networks and the "next hop" to reach them
+
+Performs NAT (Network Address Translation) — translates private internal IPs to a public IP so multiple devices can share one internet connection
+
+Modern NGFWs typically have IDS/IPS functionality built in as one module rather than as separate boxes.
+
+Load Balancer
+Round robin — cycles through servers in order
+
+Least connections — sends new requests to the server with fewest active connections
+
+IP hash — routes based on client IP, useful for session persistence ("sticky sessions")
+
+Least response time — picks the server currently responding fastest
+
+Proxies
+Forward proxy (client-side):
+Used for: content filtering (schools/offices), caching frequently accessed content, bypassing geo-restrictions, enforcing acceptable-use policies
+
+Reverse proxy (server-side):
+Used for: load balancing, SSL termination, caching, compression, protecting servers from direct exposure to the internet, serving as a single entry point for microservices
+
+VPN = Virtual Private Network
+Traffic between the client and a VPN server/gateway is encapsulated and encrypted using a tunneling protocol
+The VPN server decrypts traffic and forwards it to its destination, masking the client's real IP and location 
+
+1. TTL in IP packets:
+An 8-bit field in the IP header, set by the sending device (commonly 64, 128, or 255)
+
+2. TTL in DNS records:
+Specifies (in seconds) how long a DNS resolver/caching server should cache a record before re-querying the authoritative server
+
+Default TTL for macos/linux is 64 hops
+Default TTL for Windows is 128 hops
+
+DNS over HTTPS/TLS (DoH/DoT): newer standards that encrypt DNS queries for privacy, since plain DNS is unencrypted by default.
+
+DHCP (Dynamic Host Configuration Protocol)
+"DORA" process: Discover → Offer → Request → Acknowledge.
+
+ICMP (Internet Control Message Protocol) / Ping
+
+SSL/TLS
+Cryptographic protocols that encrypt data in transit (the "S" in HTTPS). TLS is the modern successor to SSL. Involves a handshake to establish encryption keys 
+and verify server identity via certificates.
+
+IPv4:
+32-bit address
+four decimal octets
+requires NAT
+
+IPv6:
+128-bit address
+eight groups of hexadecimal
+separated by colons
+eliminate the need for NAT
+IPsec was originally mandatory in the spec
+
+Class A: 1.0.0.0 – 126.255.255.255 (large networks, /8)
+Class B: 128.0.0.0 – 191.255.255.255 (/16)
+Class C: 192.0.0.0 – 223.255.255.255 (/24, common for small networks)
+Class D: multicast addresses
+Class E: reserved/experimental
+
+Special/Reserved Addresses
+127.0.0.1 — loopback, refers to the local device itself
+0.0.0.0 — represents "any address" or an unassigned address
+255.255.255.255 — limited broadcast address, sent to all
+TCP (Transmission Control Protocol)
+Connection-oriented — establishes a connection before sending data via the three-way handshake:
+Client sends SYN
+Server responds SYN-ACK
+Client sends ACK
+Reliable delivery — every segment is acknowledged; lost segments are retransmitted
+Ordered delivery — segments are numbered (sequence numbers) and reassembled in the correct order at the destination, even if they arrive out of order
+Error checking — checksums detect corrupted data
+Used for: Web browsing (HTTP/HTTPS), email (SMTP/IMAP), file transfer (FTP), anything where accuracy matters more than raw speed.
+
+UDP (User Datagram Protocol)
+Used for: DNS lookups, video/audio streaming, VoIP, online gaming, live broadcasts — anywhere speed and low latency matter more than perfect 
+
+NFV (Network Function Virtualization)
+VPC (Virtual Private Cloud)
+
+Cloud Service Models: IaaS, PaaS, SaaS
+
+IaaS (Infrastructure as a Service)
+Provider gives you the raw building blocks: virtual machines, storage, networking
+You manage: OS, runtime, applications, data
+Provider manages: physical hardware, virtualization, storage, networking infrastructure
+
+PaaS (Platform as a Service)
+Provider gives you a ready-to-use platform to build, deploy, and run applications, without managing the underlying servers or OS
+You manage: just your application code and data
+Provider manages: OS, runtime, middleware, servers, scaling
+
+SaaS (Software as a Service)
+Provider delivers a complete, ready-to-use application over the internet — you just use it
+You manage: nothing but your usage/data within the app
+Provider manages: everything (infrastructure, platform, application, updates)
+
+Ports
+A 16-bit number (ranging from 0 to 65535)
+How it works in practice: When your browser connects to a website, it sends a request from a random ephemeral port on your machine to port 443 (HTTPS) on the server. 
+The server knows to hand that request to its web application because of the destination port; your machine knows which browser tab to route the response back to because of the source port.
+
+Port ranges:
+
+Well-known ports (0–1023) — reserved for standard, widely used services
+Registered ports (1024–49151) — assigned to specific applications by IANA, but not as strictly controlled
+Dynamic/private ports (49152–65535) — used for temporary, client-side connections (ephemeral ports)
+
+Common well-known ports:
+
+Port	Service
+20/21	FTP (data/control)
+22	SSH
+23	Telnet
+25	SMTP (email sending)
+53	DNS
+67/68	DHCP
+80	HTTP
+110	POP3
+143	IMAP
+443	HTTPS
+3306	MySQL
+3389	RDP
+5432	PostgreSQL
+
+GRE (Generic Routing Encapsulation)
+wraps one packet inside another so it can travel across a network that might not normally support the original packet's protocol.
+
+No encryption — GRE only encapsulates/tunnels traffic, it does not provide confidentiality, authentication, or integrity checking
+Supports multicast and broadcast traffic through the tunnel (unlike plain IPsec, which is typically unicast-only) — this makes GRE popular for tunneling routing protocols 
+that rely on multicast (like OSPF)
+Adds overhead (typically 24 bytes) for the GRE + outer IP header
+it's very frequently paired with IPsec
+
+IPsec (Internet Protocol Security)
+Unlike SSL/TLS which secures a specific application connection, IPsec can secure all IP traffic between two points transparently.
+
+AH (Authentication Header) — provides authentication and integrity (ensures data hasn't been tampered with and confirms the sender's identity), but no encryption/confidentiality
+
+ESP (Encapsulating Security Payload) — provides encryption (confidentiality) plus optional authentication and integrity; this is the far more commonly used protocol 
+in practice, since AH alone offers no privacy
+
+IKE (Internet Key Exchange) — handles the negotiation of security parameters and cryptographic keys 
+Key difference: AH authenticates the entire packet including parts of the outer IP header (which is why AH breaks when NAT modifies that header — a well-known 
+"NAT-AH incompatibility" issue). ESP only encrypts/authenticates the payload (and in tunnel mode, the inner IP header), which is why ESP works much better with 
+NAT (often combined with NAT-Traversal / NAT-T, which wraps ESP in UDP port 4500).
+
+IPsec can operate in two modes, which determine what gets protected:
+
+Transport mode:
+
+Only the payload (the data portion) of the original IP packet is encrypted/authenticated
+The original IP header is preserved and used for routing
+Used for end-to-end communication between two hosts (e.g., securing a direct connection between a client and server)
+Less overhead, but exposes the original source/destination IPs
+
+Tunnel mode:
+
+The entire original IP packet (header + payload) is encrypted/authenticated and then encapsulated inside a new outer IP header
+The original header is completely hidden inside the encrypted payload
+Used for network-to-network or gateway-to-gateway communication — most common in site-to-site VPNs, where the outer header shows the VPN gateways' IPs while 
+the original internal (private) IPs stay hidden and protected
+More overhead due to the extra IP header, but provides greater security and is essential when connecting entire private networks over the public internet
+
+IKE (Internet Key Exchange)
+IPsec uses to negotiate security parameters
+Check the comprehensive document
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
